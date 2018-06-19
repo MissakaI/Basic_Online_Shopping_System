@@ -1,13 +1,13 @@
 package com.ijse.onlineshoppingsys.bo;
 
-public class OrderDetail {
+public class OrderDetailBO {
     private int id;
     private int orderId;
     private int itemId;
     private int qty;
     private double tot_amount;
 
-    public OrderDetail(int id, int orderId, int itemId, int qty, double tot_amount) {
+    public OrderDetailBO(int id, int orderId, int itemId, int qty, double tot_amount) {
         this.id = id;
         this.orderId = orderId;
         this.itemId = itemId;

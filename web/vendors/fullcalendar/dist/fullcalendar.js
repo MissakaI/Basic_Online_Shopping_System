@@ -7392,7 +7392,7 @@ Prerequisite: the object being mixed into needs to be a *Grid*
 
         renderNowIndicator: function (date) {
             // seg system might be overkill, but it handles scenario where line needs to be rendered
-            //  more than once because of columns with the same date (resources columns for example)
+            //  more than once because of columns with the same date (resource columns for example)
             var segs = this.spanToSegs({start: date, end: date});
             var top = this.computeDateTop(date, date);
             var nodes = [];

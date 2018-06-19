@@ -1,11 +1,11 @@
 package com.ijse.onlineshoppingsys.bo;
 
-public class CusomerLoginBO {
+public class CustomerLoginBO {
     private String username;
     private String password;
     private int cust_id;
 
-    public CusomerLoginBO(String username, String password, int cust_id) {
+    public CustomerLoginBO(String username, String password, int cust_id) {
         this.username = username;
         this.password = password;
         this.cust_id = cust_id;
