@@ -1,6 +1,7 @@
-package com.ijse.onlineshoppingsys.dao.custom;
+package com.ijse.onlineshoppingsys.dao.custom.impl;
 
 import com.ijse.onlineshoppingsys.bo.ItemBO;
+import com.ijse.onlineshoppingsys.dao.custom.ItemDAO;
 import com.ijse.onlineshoppingsys.resource.ResourceFactory;
 
 import java.sql.Connection;
