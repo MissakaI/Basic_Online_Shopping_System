@@ -9,27 +9,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerDAOImpl implements CustomerDAO {
-    Connection connection;
+    private Connection connection;
 
     public CustomerDAOImpl() throws SQLException, ClassNotFoundException {
-        connection=ResourceFactory.getConnectionResource(ResourceFactory.ResourceConnectionType.MYSQL).getConnection();
+        setConnection(ResourceFactory.getConnectionResource(ResourceFactory.ResourceConnectionType.MYSQL).getConnection());
     }
 
     @Override
-    public boolean create(CustomerBO customerBO) throws SQLException {
-        String SQL="INSERT INTO customer VALUES (?,?,?)";
-        PreparedStatement stm=connection.prepareStatement(SQL);
-        stm.setObject(1,customerBO.getName());
-        stm.setObject(2,customerBO.getNic());
-        stm.setObject(3,customerBO.getMobile());
-        int res=stm.executeUpdate();
-        return res>0;
+    public int create(CustomerBO customerBO) throws SQLException {
+        String SQL = String.format("INSERT INTO customer VALUES ('%s',%d,%d)", customerBO.getName(), customerBO.getNic(), customerBO.getMobile());
+        Statement stm = getConnection().createStatement();
+        int res = stm.executeUpdate(SQL, Statement.RETURN_GENERATED_KEYS);
+        try (ResultSet rst = stm.getGeneratedKeys()) {
+            if (rst.next()) {
+                return rst.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw e;
+        }
+        return -1;
     }
 
     @Override
     public boolean update(CustomerBO customerBO) throws SQLException {
         String SQL="UPDATE customer SET NAME=?,NIC=?,MOBILE=? WHERE CUST_ID=?";
-        PreparedStatement stm=connection.prepareStatement(SQL);
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         stm.setObject(1,customerBO.getName());
         stm.setObject(2,customerBO.getNic());
         stm.setObject(3,customerBO.getMobile());
@@ -41,7 +45,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     @Override
     public CustomerBO fetch(Integer custId) throws SQLException {
         String SQL="SELECT * FROM customer WHERE CUST_ID=?";
-        PreparedStatement stm=connection.prepareStatement(SQL);
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         stm.setObject(1, custId);
         ResultSet rst=stm.executeQuery();
         if(rst.next()){
@@ -58,18 +62,21 @@ public class CustomerDAOImpl implements CustomerDAO {
     @Override
     public List<CustomerBO> readAll() throws SQLException {
         String SQL="SELECT * FROM customer";
-        PreparedStatement stm=connection.prepareStatement(SQL);
-        ResultSet rst=stm.executeQuery();
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         List<CustomerBO> list=new ArrayList<>();
-        while(rst.next()){
-            list.add(
-                    new CustomerBO(
-                            rst.getInt(1),
-                            rst.getString(2),
-                            rst.getInt(3),
-                            rst.getInt(4)
-                    )
-            );
+        try (ResultSet rst = stm.executeQuery()) {
+            while (rst.next()) {
+                list.add(
+                        new CustomerBO(
+                                rst.getInt(1),
+                                rst.getString(2),
+                                rst.getInt(3),
+                                rst.getInt(4)
+                        )
+                );
+            }
+        } catch (SQLException e) {
+            throw e;
         }
         return list;
     }
@@ -77,9 +84,17 @@ public class CustomerDAOImpl implements CustomerDAO {
     @Override
     public boolean delete(Integer custId) throws SQLException {
         String SQL="DELETE FROM customer WHERE CUST_ID=?";
-        PreparedStatement stm=connection.prepareStatement(SQL);
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         stm.setObject(1,custId);
         int res=stm.executeUpdate();
         return res>0;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 }

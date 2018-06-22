@@ -18,13 +18,13 @@ public class AdminLoginDAOImpl implements AdminLoginDAO {
     }
 
     @Override
-    public boolean create(AdminLoginBO adminLoginBO) throws SQLException {
+    public int create(AdminLoginBO adminLoginBO) throws SQLException {
         String SQL="INSERT INTO adminlogin VALUES (?,PASSWORD(?))";
         PreparedStatement stm=connection.prepareStatement(SQL);
         stm.setObject(1,adminLoginBO.getUsername());
         stm.setObject(2,adminLoginBO.getPassword());
         int res=stm.executeUpdate();
-        return res>0;
+        return res > 0 ? 0 : -1;
     }
 
     @Override

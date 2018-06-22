@@ -4,10 +4,7 @@ import com.ijse.onlineshoppingsys.bo.ItemCategoryBO;
 import com.ijse.onlineshoppingsys.dao.custom.ItemCategoryDAO;
 import com.ijse.onlineshoppingsys.resource.ResourceFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +16,18 @@ public class ItemCategoryDAOImpl implements ItemCategoryDAO {
     }
 
     @Override
-    public boolean create(ItemCategoryBO itemCategoryBO) throws SQLException {
-        String SQL="INSERT INTO itemcategory VALUES (?)";
-        PreparedStatement stm=connection.prepareStatement(SQL);
-        stm.setObject(1,itemCategoryBO.getCategory());
-        int rst=stm.executeUpdate();
-        return rst>0;
+    public int create(ItemCategoryBO itemCategoryBO) throws SQLException {
+        String SQL = String.format("INSERT INTO itemcategory VALUES ('%s')", itemCategoryBO.getCategory());
+        Statement stm = connection.createStatement();
+        int res = stm.executeUpdate(SQL, Statement.RETURN_GENERATED_KEYS);
+        try (ResultSet rst = stm.getGeneratedKeys()) {
+            if (rst.next()) {
+                return rst.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw e;
+        }
+        return -1;
     }
 
     @Override

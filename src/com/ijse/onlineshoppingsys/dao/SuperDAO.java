@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface SuperDAO<T, K> {
-    boolean create(T t) throws SQLException;
+    int create(T t) throws SQLException;
 
     boolean update(T t) throws SQLException;
 

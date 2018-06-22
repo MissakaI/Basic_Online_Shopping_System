@@ -4,10 +4,7 @@ import com.ijse.onlineshoppingsys.bo.ItemBO;
 import com.ijse.onlineshoppingsys.dao.custom.ItemDAO;
 import com.ijse.onlineshoppingsys.resource.ResourceFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,15 +16,18 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public boolean create(ItemBO itemBO) throws SQLException {
-        String SQL="INSERT INTO  item VALUES  (?,?,?,?)";
-        PreparedStatement stm=connection.prepareStatement(SQL);
-        stm.setObject(1,itemBO.getName());
-        stm.setObject(2,itemBO.getQty());
-        stm.setObject(3,itemBO.getUnitPrice());
-        stm.setObject(4,itemBO.getCat_id());
-        int res=stm.executeUpdate();
-        return res>0;
+    public int create(ItemBO itemBO) throws SQLException {
+        String SQL = String.format("INSERT INTO  item VALUES  (?,?,?,?)", itemBO.getName(), itemBO.getQty(), itemBO.getUnitPrice(), itemBO.getCat_id());
+        Statement stm = connection.createStatement();
+        int res = stm.executeUpdate(SQL, Statement.RETURN_GENERATED_KEYS);
+        try (ResultSet rst = stm.getGeneratedKeys()) {
+            if (rst.next()) {
+                return rst.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw e;
+        }
+        return -1;
     }
 
     @Override
