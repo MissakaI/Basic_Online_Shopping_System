@@ -61,3 +61,13 @@ CREATE TABLE OrderDetail(
 );
 
 INSERT INTO adminlogin VALUES ('admin',PASSWORD('admin'));
+
+INSERT INTO Customer (NAME,NIC,MOBILE) VALUES ('Customer 1','123456789','0712345678');
+INSERT INTO Customer (NAME,NIC,MOBILE) VALUES ('Customer 2','123456789','0712345678');
+
+SELECT * FROM Customer;
+
+INSERT INTO CustomerLogin VALUES ('cust1',PASSWORD('cust1'),1);
+INSERT INTO CustomerLogin VALUES ('cust2',PASSWORD('cust2'),2);
+
+DELETE FROM Customer WHERE CUST_ID=6;

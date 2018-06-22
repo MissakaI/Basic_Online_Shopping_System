@@ -1,6 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.ijse.onlineshoppingsys.dto.CustomerDTO" %>
 <%@ page import="com.ijse.onlineshoppingsys.controller.ManageCustomerController" %>
+<%@ page import="com.mysql.cj.xdevapi.JsonArray" %>
 <%@ page import="com.google.gson.Gson" %><%--
   Created by IntelliJ IDEA.
   User: Missaka Iddamalgoda

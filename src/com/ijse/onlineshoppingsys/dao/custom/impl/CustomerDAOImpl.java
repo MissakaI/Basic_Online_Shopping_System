@@ -17,7 +17,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public int create(CustomerBO customerBO) throws SQLException {
-        String SQL = String.format("INSERT INTO customer VALUES ('%s',%d,%d)", customerBO.getName(), customerBO.getNic(), customerBO.getMobile());
+        String SQL = String.format("INSERT INTO customer (NAME,NIC,MOBILE) VALUES ('%s',%d,%d)", customerBO.getName(), customerBO.getNic(), customerBO.getMobile());
         Statement stm = getConnection().createStatement();
         int res = stm.executeUpdate(SQL, Statement.RETURN_GENERATED_KEYS);
         try (ResultSet rst = stm.getGeneratedKeys()) {

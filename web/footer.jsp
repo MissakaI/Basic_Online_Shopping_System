@@ -30,5 +30,14 @@
 
 <!-- Custom Theme Scripts -->
 <script src="build/js/custom.min.js"></script>
+
+<%
+    String additionalScript = (String) request.getAttribute("additionalScript");
+    if (additionalScript != null) {
+        out.println("<script>");
+        out.println(additionalScript);
+        out.println("</script>");
+    }
+%>
 </body>
 </html>
