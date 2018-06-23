@@ -1,3 +1,9 @@
+<%@ page import="com.ijse.onlineshoppingsys.controller.ManageItemController" %>
+<%@ page import="com.ijse.onlineshoppingsys.dto.CartItemDTO" %>
+<%@ page import="com.ijse.onlineshoppingsys.dto.ItemDTO" %>
+<%@ page import="com.ijse.onlineshoppingsys.dto.ReceiptDTO" %>
+<%@ page import="java.util.Collection" %>
+<%@ page import="java.util.Map" %>
 <%--
   Created by IntelliJ IDEA.
   User: Missaka Iddamalgoda
@@ -162,7 +168,7 @@
         </div>
         <!-- /top navigation -->
 --%>
-<%@include file="adminHeader.jsp" %>
+<%@include file="header.jsp" %>
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
@@ -189,7 +195,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Plain Page</h2>
+                        <h2>Existing Items</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -209,7 +215,66 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        Add content to the page ...
+
+                        <div class="table-responsive">
+                            <table class="table table-striped jambo_table">
+                                <thead>
+                                <tr class="headings">
+                                    <th>
+                                        <input type="checkbox" id="check-all" class="flat">
+                                    </th>
+                                    <th class="column-title">Item ID</th>
+                                    <th class="column-title">Description</th>
+                                    <th class="column-title">Category</th>
+                                    <th class="column-title">Available Stock</th>
+                                    <th class="column-title">Unit Price</th>
+                                    <th class="column-title no-link last"><span class="nobr">Action</span>
+                                    </th>
+                                    <%--<th class="bulk-actions" colspan="7">
+                                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                    </th>--%>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <%
+                                    ManageItemController controller = new ManageItemController();
+                                    Collection<ItemDTO> itemMap = controller.viewItems();
+                                    ReceiptDTO receipt = (ReceiptDTO) session.getAttribute("receipt");
+                                    Map<Integer, CartItemDTO> map = receipt != null ? receipt.getItemMap() : null;
+                                    int i = 0;
+                                    for (ItemDTO itm : itemMap) {
+                                %>
+                                <tr class="<%=i++%2==0?"even":"odd"%> pointer">
+                                    <td class="a-center ">
+                                        <input type="checkbox" class="flat" name="customer_ids"
+                                               value="<%=itm.getId()%>">
+                                    </td>
+                                    <td class=""><%=itm.getId()%>
+                                    </td>
+                                    <td class=""><%=itm.getName()%>
+                                    </td>
+                                    <td class=""><%=itm.getCat()%>
+                                    </td>
+                                    <td class=""><%=(map != null && map.get(itm.getId()) != null) ? (itm.getQty()) - (map.get(itm.getId()).getQty()) : itm.getQty()%>
+                                    </td>
+                                    <td class=""><%=itm.getUnitPrice()%>
+                                    </td>
+                                    <td class="last">
+                                        <form action="/homeController" method="post">
+                                            <input type="number" value="1" id="qty" name="qty" class="form-control">
+                                            <input type="hidden" value="<%=itm.getId()%>" name="item_id">
+                                            <a class="add"><i class="fa fa-cart-plus"></i><span>Add to Cart</span></a>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <%
+                                    }
+                                %>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -217,31 +282,20 @@
     </div>
 </div>
 <!-- /page content -->
+
+<%--<script>
+    $(".add").click(function (event) {
+        var form=$(".add").parent();
+        form.submit();
+    })
+</script>--%>
+
+<%
+    String script = "    $(\".add\").click(function (event) {\n" +
+            "        var form=$(this).parent();\n" +
+            "        form.submit();\n" +
+            "    })\n";
+    request.setAttribute("additionalScript", script);
+%>
+
 <%@include file="footer.jsp" %>
-
-<%--
-        <!-- footer content -->
-        <footer>
-            <div class="pull-right">
-                Online Shopping System by <a href="#">Missaka Iddamalgoda</a>
-            </div>
-            <div class="clearfix"></div>
-        </footer>
-        <!-- /footer content -->
-    </div>
-</div>
-
-<!-- jQuery -->
-<script src="vendors/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap -->
-<script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- FastClick -->
-<script src="vendors/fastclick/lib/fastclick.js"></script>
-<!-- NProgress -->
-<script src="vendors/nprogress/nprogress.js"></script>
-
-<!-- Custom Theme Scripts -->
-<script src="build/js/custom.min.js"></script>
-</body>
-</html>--%>
-

@@ -1,6 +1,8 @@
 package com.ijse.onlineshoppingsys.dto;
 
-public class CustomerDTO {
+import java.io.Serializable;
+
+public class CustomerDTO implements Serializable {
     private int cust_id;
     private String name;
     private int nic;

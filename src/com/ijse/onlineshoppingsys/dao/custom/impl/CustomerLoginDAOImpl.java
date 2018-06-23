@@ -39,12 +39,12 @@ public class CustomerLoginDAOImpl implements CustomerLoginDAO{
     }
 
     @Override
-    public CustomerLoginBO fetch(String s) throws SQLException {
+    public CustomerLoginBO fetch(String s) {
         throw new UnsupportedOperationException("Operation not supported for this Business Object");
     }
 
     @Override
-    public List<CustomerLoginBO> readAll() throws SQLException {
+    public List<CustomerLoginBO> readAll() {
         throw new UnsupportedOperationException("Operation not supported for this Business Object");
     }
 
@@ -59,13 +59,14 @@ public class CustomerLoginDAOImpl implements CustomerLoginDAO{
 
     @Override
     public Integer checkCredentials(CustomerLoginBO custLoginBO) throws SQLException {
-        String SQL="SELECT PASSWORD=PASSWORD(?),cust_id FROM adminlogin WHERE USERNAME=?";
+        String SQL = "SELECT CUST_PASSWORD=PASSWORD(?),CUST_ID FROM customerlogin WHERE CUST_USERNAME=?";
         PreparedStatement stm = getConnection().prepareStatement(SQL);
         stm.setObject(2,custLoginBO.getUsername());
         stm.setObject(1,custLoginBO.getPassword());
         ResultSet rst=stm.executeQuery();
-        if(rst.next() && rst.getBoolean(1))
+        if (rst.next() && rst.getBoolean(1)) {
             return rst.getInt(2);
+        }
         return -1;
     }
 

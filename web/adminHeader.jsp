@@ -66,9 +66,9 @@
                         <h3>General</h3>
                         <ul class="nav side-menu">
                             <li><a href="index.jsp"><i class="fa fa-home"></i> Home </a></li>
-                            <li><a><i class="fa fa-users"></i> Customer</a>
+                            <li><a href="manageCustomers.jsp"><i class="fa fa-users"></i> Customer</a>
                             </li>
-                            <li><a><i class="fa fa-desktop"></i> Items </a>
+                            <li><a href="manageItems.jsp"><i class="fa fa-desktop"></i> Items </a>
                             </li>
 
                         </ul>
@@ -106,7 +106,7 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <li class="">
-                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                            <a href="javascript:" class="user-profile dropdown-toggle" data-toggle="dropdown"
                                aria-expanded="false">
                                 <img src="images/img.jpg" alt="">Admin
                                 <%--<span class=" fa fa-angle-down"></span>--%>

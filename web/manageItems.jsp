@@ -86,9 +86,9 @@
                                 <tbody>
                                 <%
                                     ManageItemController controller = new ManageItemController();
-                                    List<ItemDTO> itemList = controller.viewItems();
-                                    for (int i = 0; i < itemList.size(); i++) {
-                                        ItemDTO itm = itemList.get(i);
+                                    List<ItemDTO> itemMap = controller.viewItems();
+                                    for (int i = 0; i < itemMap.size(); i++) {
+                                        ItemDTO itm = itemMap.get(i);
                                 %>
                                 <tr class="<%=i%2==0?"even":"odd"%> pointer">
                                     <td class="a-center ">
@@ -279,7 +279,7 @@
 
 </script>--%>
 <%
-    String script = "var text='{\"items\":" + new Gson().toJson(itemList) + "}';\n" +
+    String script = "var text='{\"items\":" + new Gson().toJson(itemMap) + "}';\n" +
             " var obj=JSON.parse(text);\n" +
             " var isEditing=false;" +
             " $(\".edit\").parent().click(function (event) {\n" +
