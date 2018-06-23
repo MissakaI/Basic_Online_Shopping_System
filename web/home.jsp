@@ -162,7 +162,7 @@
         </div>
         <!-- /top navigation -->
 --%>
-<%@include file="header.jsp" %>
+<%@include file="adminHeader.jsp" %>
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">

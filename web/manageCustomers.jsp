@@ -1,7 +1,7 @@
-<%@ page import="java.util.List" %>
-<%@ page import="com.ijse.onlineshoppingsys.dto.CustomerDTO" %>
+<%@ page import="com.google.gson.Gson" %>
 <%@ page import="com.ijse.onlineshoppingsys.controller.ManageCustomerController" %>
-<%@ page import="com.google.gson.Gson" %><%--
+<%@ page import="com.ijse.onlineshoppingsys.dto.CustomerDTO" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: Missaka Iddamalgoda
   Date: 2018-06-20
@@ -10,7 +10,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<%@include file="header.jsp" %>
+<%@include file="adminHeader.jsp" %>
 
 <!-- page content -->
 <div class="right_col" role="main">

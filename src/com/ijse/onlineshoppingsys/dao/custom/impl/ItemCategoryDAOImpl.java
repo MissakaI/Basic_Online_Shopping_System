@@ -9,16 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemCategoryDAOImpl implements ItemCategoryDAO {
-    Connection connection;
+    private Connection connection;
 
     public ItemCategoryDAOImpl() throws SQLException, ClassNotFoundException {
-        connection=ResourceFactory.getConnectionResource(ResourceFactory.ResourceConnectionType.MYSQL).getConnection();
+        setConnection(ResourceFactory.getConnectionResource(ResourceFactory.ResourceConnectionType.MYSQL).getConnection());
     }
 
     @Override
     public int create(ItemCategoryBO itemCategoryBO) throws SQLException {
         String SQL = String.format("INSERT INTO itemcategory VALUES ('%s')", itemCategoryBO.getCategory());
-        Statement stm = connection.createStatement();
+        Statement stm = getConnection().createStatement();
         int res = stm.executeUpdate(SQL, Statement.RETURN_GENERATED_KEYS);
         try (ResultSet rst = stm.getGeneratedKeys()) {
             if (rst.next()) {
@@ -33,7 +33,7 @@ public class ItemCategoryDAOImpl implements ItemCategoryDAO {
     @Override
     public boolean update(ItemCategoryBO itemCategoryBO) throws SQLException {
         String SQL="UPDATE itemcategory SET CATEGORY=? WHERE CAT_ID=?";
-        PreparedStatement stm=connection.prepareStatement(SQL);
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         stm.setObject(1,itemCategoryBO.getCategory());
         stm.setObject(2,itemCategoryBO.getCat_id());
         int rst=stm.executeUpdate();
@@ -43,7 +43,7 @@ public class ItemCategoryDAOImpl implements ItemCategoryDAO {
     @Override
     public ItemCategoryBO fetch(Integer catID) throws SQLException {
         String SQL="SELECT * FROM itemcategory WHERE CAT_ID=?";
-        PreparedStatement stm=connection.prepareStatement(SQL);
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         stm.setObject(1,catID);
         ResultSet rst=stm.executeQuery();
         if (rst.next()){
@@ -58,7 +58,7 @@ public class ItemCategoryDAOImpl implements ItemCategoryDAO {
     @Override
     public List<ItemCategoryBO> readAll() throws SQLException {
         String SQL="SELECT * FROM itemcategory";
-        PreparedStatement stm=connection.prepareStatement(SQL);
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         ResultSet rst=stm.executeQuery();
         List<ItemCategoryBO> list=new ArrayList<>();
         while(rst.next()){
@@ -75,9 +75,17 @@ public class ItemCategoryDAOImpl implements ItemCategoryDAO {
     @Override
     public boolean delete(Integer catID) throws SQLException {
         String SQL="SELECT * FROM itemcategory WHERE CAT_ID=?";
-        PreparedStatement stm=connection.prepareStatement(SQL);
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         stm.setObject(1,catID);
         int rst=stm.executeUpdate();
         return rst>0;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 }

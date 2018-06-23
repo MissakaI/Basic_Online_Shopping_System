@@ -1,8 +1,9 @@
+<%@ page import="com.google.gson.Gson" %>
+<%@ page import="com.ijse.onlineshoppingsys.controller.ManageItemController" %>
+<%@ page import="com.ijse.onlineshoppingsys.dto.ItemCategoryDTO" %>
+<%@ page import="com.ijse.onlineshoppingsys.dto.ItemDTO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.ijse.onlineshoppingsys.dto.CustomerDTO" %>
-<%@ page import="com.ijse.onlineshoppingsys.controller.ManageCustomerController" %>
-<%@ page import="com.mysql.cj.xdevapi.JsonArray" %>
-<%@ page import="com.google.gson.Gson" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: Missaka Iddamalgoda
   Date: 2018-06-20
@@ -11,14 +12,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<%@include file="header.jsp" %>
+<%@include file="adminHeader.jsp" %>
 
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Manage your customers here</h3>
+                <h3>Manage your items here</h3>
             </div>
 
             <%--
@@ -41,7 +42,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Registered Customers</h2>
+                        <h2>Existing Items</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -69,10 +70,11 @@
                                     <th>
                                         <input type="checkbox" id="check-all" class="flat">
                                     </th>
-                                    <th class="column-title">Customer ID</th>
-                                    <th class="column-title">Name</th>
-                                    <th class="column-title">NIC</th>
-                                    <th class="column-title">Mobile</th>
+                                    <th class="column-title">Item ID</th>
+                                    <th class="column-title">Description</th>
+                                    <th class="column-title">Category</th>
+                                    <th class="column-title">Available Stock</th>
+                                    <th class="column-title">Unit Price</th>
                                     <th class="column-title no-link last"><span class="nobr">Action</span>
                                     </th>
                                     <%--<th class="bulk-actions" colspan="7">
@@ -83,27 +85,30 @@
 
                                 <tbody>
                                 <%
-                                    List<CustomerDTO> customerList = new ManageCustomerController().viewCustomers();
-                                    for (int i = 0; i < customerList.size(); i++) {
-                                        CustomerDTO cust = customerList.get(i);
+                                    ManageItemController controller = new ManageItemController();
+                                    List<ItemDTO> itemList = controller.viewItems();
+                                    for (int i = 0; i < itemList.size(); i++) {
+                                        ItemDTO itm = itemList.get(i);
                                 %>
                                 <tr class="<%=i%2==0?"even":"odd"%> pointer">
                                     <td class="a-center ">
                                         <input type="checkbox" class="flat" name="customer_ids"
-                                               value="<%=cust.getCust_id()%>">
+                                               value="<%=itm.getId()%>">
                                     </td>
-                                    <td class=""><%=cust.getCust_id()%>
+                                    <td class=""><%=itm.getId()%>
                                     </td>
-                                    <td class=""><%=cust.getName()%>
+                                    <td class=""><%=itm.getName()%>
                                     </td>
-                                    <td class=""><%=cust.getNic()%>
+                                    <td class=""><%=itm.getCat()%>
                                     </td>
-                                    <td class=""><%=cust.getMobile()%>
+                                    <td class=""><%=itm.getQty()%>
+                                    </td>
+                                    <td class=""><%=itm.getUnitPrice()%>
                                     </td>
                                     <td class="last">
                                         <a><input type="hidden" value="<%=i%>" class="edit"><i
                                                 class="fa fa-user-plus"></i><span>Edit</span></a>
-                                        <a><input type="hidden" value="<%=cust.getCust_id()%>" name="cust_id"
+                                        <a><input type="hidden" value="<%=itm.getId()%>" name="cust_id"
                                                   class="delete"><i class="fa fa-user-md"></i><span>Delete</span></a>
                                     </td>
                                 </tr>
@@ -148,48 +153,50 @@
                           action="/manageCustomerController">
 
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="cust_id">Customer ID</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="item_id">Item ID</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="cust_id" disabled="disabled" name="cust_id"
+                                <input type="text" id="item_id" disabled="disabled" name="item_id"
                                        class="form-control col-md-7 col-xs-12">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="cust_name">Name<span
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="item_name">Description<span
                                     class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="cust_name" required="required" name="cust_name"
+                                <input type="text" id="item_name" required="required" name="item_name"
                                        class="form-control col-md-7 col-xs-12">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nic">NIC<span
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="qty">Qty<span
                                     class="required">*</span>
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="nic" name="nic" required="required"
+                                <input type="number" id="qty" name="qty" required="required"
                                        class="form-control col-md-7 col-xs-12">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="mobile" class="control-label col-md-3 col-sm-3 col-xs-12">Mobile Number</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="unit_price">Unit Price</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input id="mobile" name="mobile" class="form-control col-md-7 col-xs-12" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="username" class="control-label col-md-3 col-sm-3 col-xs-12">Username</label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input id="username" name="username" class="form-control col-md-7 col-xs-12"
+                                <input id="unit_price" name="unit_price" class="form-control col-md-7 col-xs-12"
                                        type="text">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="password" class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input id="password" name="password" class="form-control col-md-7 col-xs-12"
-                                       type="password">
+                                <select name="cat_id" class="form-control">
+                                    <%
+                                        for (ItemCategoryDTO categoryDTO : controller.getCategories()) {
+                                    %>
+                                    <option value="<%=categoryDTO.getCat_id()%>"><%=categoryDTO.getCategory()%>
+                                    </option>
+                                    <%
+                                        }
+                                    %>
+                                </select>
                             </div>
                         </div>
                         <div class="ln_solid"></div>
@@ -213,16 +220,16 @@
     var isEditing=false;
     $(".edit").parent().click(function (event) {
         var index = $(this).children(".edit").val();
-        $("#cust_id").val(obj.customers[index].cust_id);
-        $("#cust_name").val(obj.customers[index].name);
-        $("#nic").val(obj.customers[index].nic);
+        $("#item_id").val(obj.customers[index].item_id);
+        $("#item_name").val(obj.customers[index].name);
+        $("#qty").val(obj.customers[index].qty);
         $("#mobile").val(obj.customers[index].mobile);
         isEditing=true;
         event.preventDefault();
     });
 
     $(".delete").parent().click(function (event) {
-        var cust_id = $(this).children(".delete").val();
+        var item_id = $(this).children(".delete").val();
         var form = $('<form></form>');
 
         form.attr("method", "post");
@@ -230,8 +237,8 @@
 
         var fieldCustId = $('<input></input>');
         fieldCustId.attr("type", "hidden");
-        fieldCustId.attr("name", "cust_id");
-        fieldCustId.attr("value", cust_id);
+        fieldCustId.attr("name", "item_id");
+        fieldCustId.attr("value", item_id);
         form.append(fieldCustId);
 
         var fieldAction= $('<input></input>');
@@ -272,20 +279,21 @@
 
 </script>--%>
 <%
-    String script = "var text='{\"customers\":" + new Gson().toJson(customerList) + "}';\n" +
+    String script = "var text='{\"items\":" + new Gson().toJson(itemList) + "}';\n" +
             " var obj=JSON.parse(text);\n" +
             " var isEditing=false;" +
             " $(\".edit\").parent().click(function (event) {\n" +
             "        var index = $(this).children(\".edit\").val();\n" +
             "        isEditing=true;\n" +
-            "        $(\"#cust_id\").val(obj.customers[index].cust_id);\n" +
-            "        $(\"#cust_name\").val(obj.customers[index].name);\n" +
-            "        $(\"#nic\").val(obj.customers[index].nic);\n" +
-            "        $(\"#mobile\").val(obj.customers[index].mobile);" +
+            "        $(\"#item_id\").val(obj.items[index].id);\n" +
+            "        $(\"#item_name\").val(obj.items[index].name);\n" +
+            "        $(\"#qty\").val(obj.items[index].qty);\n" +
+            "        $(\"#unit_price\").val(obj.items[index].unitPrice);" +
+            "        $(\"#cat_id\").val(obj.items[index].cat_id);" +
             " });\n";
 
     script += "$(\".delete\").parent().click(function (event) {\n" +
-            "        var cust_id = $(this).children(\".delete\").val();\n" +
+            "        var item_id = $(this).children(\".delete\").val();\n" +
             "        var form = $('<form></form>');\n" +
             "\n" +
             "        form.attr(\"method\", \"post\");\n" +
@@ -293,8 +301,8 @@
             "\n" +
             "        var fieldCustId = $('<input></input>');\n" +
             "        fieldCustId.attr(\"type\", \"hidden\");\n" +
-            "        fieldCustId.attr(\"name\", \"cust_id\");\n" +
-            "        fieldCustId.attr(\"value\", cust_id);\n" +
+            "        fieldCustId.attr(\"name\", \"item_id\");\n" +
+            "        fieldCustId.attr(\"value\", item_id);\n" +
             "        form.append(fieldCustId);\n" +
             "\n" +
             "        var fieldAction= $('<input></input>');\n" +

@@ -1,9 +1,9 @@
 package com.ijse.onlineshoppingsys.service.custom;
 
-import com.ijse.onlineshoppingsys.dto.LoginCredentialsDTO;
 import com.ijse.onlineshoppingsys.dto.CustomerDTO;
 import com.ijse.onlineshoppingsys.dto.ItemCategoryDTO;
 import com.ijse.onlineshoppingsys.dto.ItemDTO;
+import com.ijse.onlineshoppingsys.dto.LoginCredentialsDTO;
 import com.ijse.onlineshoppingsys.service.SuperService;
 
 import java.sql.SQLException;
@@ -22,16 +22,18 @@ public interface AdminServices extends SuperService {
 
     CustomerDTO searchCustomer(int cust_id) throws SQLException, ClassNotFoundException;
 
-    boolean newItem(ItemDTO dto);
+    boolean newItem(ItemDTO dto) throws SQLException, ClassNotFoundException;
 
-    boolean newCategory(ItemCategoryDTO dto);
+    boolean newCategory(ItemCategoryDTO dto) throws SQLException, ClassNotFoundException;
 
-    boolean newItemAndCategory(ItemDTO item, ItemCategoryDTO cat);
+    boolean newItemAndCategory(ItemDTO item, ItemCategoryDTO cat) throws SQLException, ClassNotFoundException;
 
-    boolean updateItem(ItemDTO dto);
+    boolean updateItem(ItemDTO dto) throws SQLException, ClassNotFoundException;
 
-    boolean removeItem(int id);
-    List<ItemCategoryDTO> getCategories();
-    List<ItemDTO> getItems();
+    boolean removeItem(int id) throws SQLException, ClassNotFoundException;
+
+    List<ItemCategoryDTO> getCategories() throws SQLException, ClassNotFoundException;
+
+    List<ItemDTO> getItems() throws SQLException, ClassNotFoundException;
 
 }

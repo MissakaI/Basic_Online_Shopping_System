@@ -9,16 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDAOImpl implements ItemDAO {
-    Connection connection;
+    private Connection connection;
 
     public ItemDAOImpl() throws SQLException, ClassNotFoundException {
-        connection=ResourceFactory.getConnectionResource(ResourceFactory.ResourceConnectionType.MYSQL).getConnection();
+        setConnection(ResourceFactory.getConnectionResource(ResourceFactory.ResourceConnectionType.MYSQL).getConnection());
     }
 
     @Override
     public int create(ItemBO itemBO) throws SQLException {
-        String SQL = String.format("INSERT INTO  item VALUES  (?,?,?,?)", itemBO.getName(), itemBO.getQty(), itemBO.getUnitPrice(), itemBO.getCat_id());
-        Statement stm = connection.createStatement();
+        String SQL = String.format("INSERT INTO item (ITEM_NAME,QTY,UNIT_PRICE,CAT_ID) VALUES  (?,?,?,?)", itemBO.getName(), itemBO.getQty(), itemBO.getUnitPrice(), itemBO.getCat_id());
+        Statement stm = getConnection().createStatement();
         int res = stm.executeUpdate(SQL, Statement.RETURN_GENERATED_KEYS);
         try (ResultSet rst = stm.getGeneratedKeys()) {
             if (rst.next()) {
@@ -33,7 +33,7 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public boolean update(ItemBO itemBO) throws SQLException {
         String SQL="UPDATE item SET ITEM_NAME=?, QTY=?, UNIT_PRICE=?, CAT_ID=? WHERE ITEM_ID=?";
-        PreparedStatement stm=connection.prepareStatement(SQL);
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         stm.setObject(1,itemBO.getName());
         stm.setObject(2,itemBO.getQty());
         stm.setObject(3,itemBO.getUnitPrice());
@@ -46,7 +46,7 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public ItemBO fetch(Integer itemID) throws SQLException {
         String SQL="SELECT * FROM item WHERE ITEM_ID=?";
-        PreparedStatement stm=connection.prepareStatement(SQL);
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         stm.setObject(1,itemID);
         ResultSet rst=stm.executeQuery();
         if (rst.next()){
@@ -64,7 +64,7 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public List<ItemBO> readAll() throws SQLException {
         String SQL="SELECT * FROM item";
-        PreparedStatement stm=connection.prepareStatement(SQL);
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         ResultSet rst=stm.executeQuery();
         List<ItemBO> list=new ArrayList<>();
         while (rst.next()){
@@ -82,9 +82,18 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public boolean delete(Integer itemId) throws SQLException {
         String SQL="DELETE FROM item WHERE ITEM_ID=?";
-        PreparedStatement stm=connection.prepareStatement(SQL);
+        PreparedStatement stm = getConnection().prepareStatement(SQL);
         stm.setObject(1,itemId);
         int res=stm.executeUpdate();
         return res>0;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    @Override
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 }
